@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "test@local",
+      "password": "123456",
+      "fullname": "Local Test",
+      "phone": "0900000000",
+      "address": "Local",
+      "app_id": 1,
+      "license": "LOCAL",
+      "expiredAt": 1806233523898,
+      "discountLabel": null
+    },
+    {
+      "id": 2,
+      "email": "fsdfsffdf@gmail.com",
+      "password": "lohoain6am",
+      "fullname": "fdsfsdgfdg",
+      "phone": "0972565612",
+      "address": "dasf",
+      "app_id": 1,
+      "license": "PRO-VIP-I2SS",
+      "license_type": "forever",
+      "plan_id": 99,
+      "expiredAt": 2638611170919,
+      "discountLabel": null
+    }
+  ]
+}

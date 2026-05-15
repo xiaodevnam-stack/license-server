@@ -1,0 +1,297 @@
+<?php
+/**
+ * ZChat CRM Landing Page - Optimized PHP Version
+ * Minimal dependencies, maximum performance, professional UI.
+ */
+$config = [
+    'app_name' => 'ZChat CRM',
+    'primary_color' => '#006edc',
+    'support_url' => 'https://zalo.me/your-link',
+    'version' => '2.0.16'
+];
+?>
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $config['app_name']; ?> - Giải pháp Marketing Zalo AIO</title>
+    <meta name="description" content="Tự động hóa gửi tin nhắn, quét khách hàng và quản lý CRM chuyên nghiệp trên Zalo.">
+    
+    <!-- Core Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '<?php echo $config['primary_color']; ?>',
+                        'primary-dark': '#0056b3',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn { @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-all duration-200 active:scale-95; }
+            .btn-primary { @apply bg-primary text-white shadow-lg shadow-blue-200 hover:bg-primary-dark hover:shadow-xl; }
+            .btn-secondary { @apply bg-white text-primary border-2 border-primary hover:bg-blue-50; }
+            .glass { @apply bg-white/80 backdrop-blur-md; }
+            .card { @apply bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300; }
+        }
+        .text-gradient { @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-900 antialiased">
+
+    <!-- Header -->
+    <nav class="fixed top-0 w-full z-50 border-b border-slate-100 glass">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+                    <i class="fa-solid fa-bolt text-white text-xl"></i>
+                </div>
+                <span class="text-2xl font-extrabold tracking-tight italic"><?php echo $config['app_name']; ?></span>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-10 font-bold text-sm text-slate-600">
+                <a href="#features" class="hover:text-primary transition-colors">Tính năng</a>
+                <a href="#how-it-works" class="hover:text-primary transition-colors">Cách dùng</a>
+                <a href="#pricing" class="hover:text-primary transition-colors">Bảng giá</a>
+                <a href="<?php echo $config['support_url']; ?>" class="hover:text-primary transition-colors">Hỗ trợ</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#" class="btn btn-primary px-5 py-2.5 text-sm">Tải Tiện Ích</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="pt-40 pb-20 px-4 overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-primary rounded-full text-xs font-bold border border-blue-100 mb-8 animate-bounce">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-2 rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+                </span>
+                MỚI: Cập nhật phiên bản <?php echo $config['version']; ?>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-8 leading-[1.1] tracking-tight">
+                Làm chủ Marketing Zalo <br>
+                <span class="text-gradient">Tự động & Chuyên nghiệp</span>
+            </h1>
+            
+            <p class="text-xl text-slate-600 max-w-3xl mb-12 leading-relaxed font-medium">
+                Bộ công cụ giúp bạn khai thác hàng triệu khách hàng trên Zalo. <br class="hidden md:block">
+                Gửi tin nhắn hàng loạt, quét UID, tự động chăm sóc chỉ với vài cú click.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-5 mb-20">
+                <a href="#pricing" class="btn btn-primary text-lg px-10">
+                    Dùng Thử Miễn Phí <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#" class="btn btn-secondary text-lg px-10">
+                    Video Hướng Dẫn
+                </a>
+            </div>
+
+            <div class="relative w-full max-w-5xl">
+                <div class="relative z-10 p-2 bg-white rounded-[2.5rem] shadow-2xl border border-slate-100">
+                    <img src="https://framerusercontent.com/images/kYh8U6M7tA8U4y5Q6w0A0E0E.png" alt="ZChat CRM Dashboard" class="rounded-[2rem] w-full">
+                </div>
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-blue-400/20 blur-[100px] rounded-full"></div>
+                <div class="absolute -bottom-10 -right-10 w-60 h-60 bg-purple-400/20 blur-[120px] rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-12 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="text-4xl font-black text-slate-900 mb-1">5,000+</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Khách hàng</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-black text-slate-900 mb-1">10M+</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Tin nhắn gửi đi</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-black text-slate-900 mb-1">24/7</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Hỗ trợ kỹ thuật</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-black text-slate-900 mb-1">99%</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Hài lòng</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-32 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black mb-4">Tính năng "Sát thủ"</h2>
+                <p class="text-slate-500 font-bold">Mọi thứ bạn cần để thống trị thị trường Zalo</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card group">
+                    <div class="w-14 h-14 bg-blue-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-100 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-paper-plane text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold mb-4">Gửi tin hàng loạt</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed">Tự động gửi tin nhắn cá nhân hóa cho danh sách bạn bè, khách hàng theo kịch bản có sẵn.</p>
+                </div>
+
+                <div class="card group">
+                    <div class="w-14 h-14 bg-purple-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-purple-100 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-users-viewfinder text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold mb-4">Quét UID chuyên sâu</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed">Quét thành viên nhóm, bạn bè từ SĐT. Chuyển đổi dữ liệu thô thành khách hàng mục tiêu.</p>
+                </div>
+
+                <div class="card group">
+                    <div class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-emerald-100 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-robot text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold mb-4">Chăm sóc tự động</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed">Tự động chúc mừng sinh nhật, gửi hóa đơn, thông báo nhắc lịch định kỳ chuyên nghiệp.</p>
+                </div>
+
+                <div class="card group">
+                    <div class="w-14 h-14 bg-amber-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-amber-100 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-link text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold mb-4">Tự động tham gia nhóm</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed">Tự động vào hàng loạt nhóm từ link, giúp mở rộng tệp khách hàng nhanh chóng.</p>
+                </div>
+
+                <div class="card group">
+                    <div class="w-14 h-14 bg-rose-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-rose-100 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold mb-4">Chống Spam thông minh</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed">Giả lập hành vi người dùng, giới hạn tốc độ gửi để bảo vệ tài khoản Zalo an toàn tuyệt đối.</p>
+                </div>
+
+                <div class="card group">
+                    <div class="w-14 h-14 bg-indigo-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-indigo-100 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-tags text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold mb-4">Phân loại & Gán nhãn</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed">Quản lý khách hàng theo nhãn dán, trạng thái giúp việc chăm sóc trở nên khoa học.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black mb-4">Bảng giá linh hoạt</h2>
+                <p class="text-slate-500 font-bold">Lựa chọn gói phù hợp với nhu cầu của bạn</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+                <!-- Trial -->
+                <div class="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 flex flex-col">
+                    <h4 class="text-xl font-bold mb-2">Bản Dùng Thử</h4>
+                    <div class="text-4xl font-black mb-8 italic">0đ <span class="text-sm font-bold text-slate-400">/ 24 Giờ</span></div>
+                    <ul class="space-y-4 mb-10 flex-grow">
+                        <li class="flex items-center gap-3 font-semibold text-slate-600">
+                            <i class="fa-solid fa-circle-check text-primary"></i> Trải nghiệm full tính năng
+                        </li>
+                        <li class="flex items-center gap-3 font-semibold text-slate-600">
+                            <i class="fa-solid fa-circle-check text-primary"></i> Không giới hạn gửi tin
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary w-full">Dùng Thử Ngay</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="p-10 rounded-[3rem] bg-white border-2 border-primary relative shadow-2xl scale-105 z-10 flex flex-col">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-200">
+                        PHỔ BIẾN NHẤT
+                    </div>
+                    <h4 class="text-xl font-bold mb-2">Gói Chuyên Nghiệp</h4>
+                    <div class="text-4xl font-black mb-1 text-primary italic">1.500.000đ</div>
+                    <div class="text-xs font-bold text-slate-400 mb-8 uppercase tracking-widest">Thời hạn 12 Tháng</div>
+                    <ul class="space-y-4 mb-10 flex-grow">
+                        <li class="flex items-center gap-3 font-bold text-slate-800">
+                            <i class="fa-solid fa-gift text-rose-500"></i> Tặng thêm 3 tháng sử dụng
+                        </li>
+                        <li class="flex items-center gap-3 font-semibold text-slate-700">
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i> Hỗ trợ cài đặt & HDSD 1:1
+                        </li>
+                        <li class="flex items-center gap-3 font-semibold text-slate-700">
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i> Cập nhật tính năng mới nhất
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-primary w-full text-lg py-4 shadow-xl">Nâng Cấp PRO Ngay</a>
+                </div>
+
+                <!-- Lifetime -->
+                <div class="p-10 rounded-[3rem] bg-slate-900 text-white flex flex-col shadow-2xl">
+                    <h4 class="text-xl font-bold mb-2">Gói Vĩnh Viễn</h4>
+                    <div class="text-4xl font-black mb-8 italic text-blue-400">3.500.000đ</div>
+                    <ul class="space-y-4 mb-10 flex-grow">
+                        <li class="flex items-center gap-3 font-semibold text-slate-300">
+                            <i class="fa-solid fa-circle-check text-blue-400"></i> Thanh toán 1 lần dùng mãi mãi
+                        </li>
+                        <li class="flex items-center gap-3 font-semibold text-slate-300">
+                            <i class="fa-solid fa-circle-check text-blue-400"></i> Cập nhật trọn đời
+                        </li>
+                        <li class="flex items-center gap-3 font-semibold text-slate-300">
+                            <i class="fa-solid fa-circle-check text-blue-400"></i> Hỗ trợ ưu tiên hàng đầu
+                        </li>
+                    </ul>
+                    <a href="#" class="btn bg-white text-slate-900 w-full hover:bg-slate-100">Liên Hệ Mua</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-4 bg-white">
+        <div class="max-w-5xl mx-auto bg-primary rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-blue-200">
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-8 leading-tight">Bắt đầu bứt phá doanh số <br> trên Zalo ngay hôm nay!</h2>
+                <a href="#pricing" class="btn bg-white text-primary px-12 py-5 rounded-2xl font-black text-xl hover:shadow-2xl">
+                    DÙNG THỬ MIỄN PHÍ
+                </a>
+            </div>
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-50 py-20 px-4 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto flex flex-col items-center">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-bolt text-white text-sm"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tighter italic text-slate-900"><?php echo $config['app_name']; ?></span>
+            </div>
+            <p class="text-slate-400 font-bold text-sm">
+                © <?php echo date('Y'); ?> <?php echo $config['app_name']; ?> Assistant. Built with passion for sellers.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

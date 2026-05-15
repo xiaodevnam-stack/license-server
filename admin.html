@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>License Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { margin-bottom: 20px; color: #333; }
+    .login-panel, .admin-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: 500; color: #555; }
+    input, select { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    button { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button:hover { background: #1d4ed8; }
+    button.secondary { background: #6b7280; }
+    button.secondary:hover { background: #4b5563; }
+    button.danger { background: #dc2626; }
+    button.danger:hover { background: #b91c1c; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { background: #f9fafb; font-weight: 600; color: #374151; }
+    tr:hover { background: #f9fafb; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+    .badge-active { background: #d1fae5; color: #065f46; }
+    .badge-expired { background: #fee2e2; color: #991b1b; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; }
+    .modal h2 { margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .hidden { display: none; }
+    .error { color: #dc2626; margin-top: 10px; }
+    .success { color: #16a34a; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>License Admin Panel</h1>
+    
+    <div id="loginPanel" class="login-panel">
+      <div class="form-group">
+        <label>Admin Token</label>
+        <input type="password" id="adminToken" placeholder="Enter admin token (default: admin123)">
+      </div>
+      <button onclick="login()">Login</button>
+      <div id="loginError" class="error hidden"></div>
+    </div>
+
+    <div id="adminPanel" class="admin-panel hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Users</h2>
+        <button onclick="loadUsers()">Refresh</button>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>License</th>
+            <th>Status</th>
+            <th>Days Left</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersTable"></tbody>
+      </table>
+      
+      <div id="message" class="success hidden"></div>
+    </div>
+  </div>
+
+  <div id="licenseModal" class="modal-overlay">
+    <div class="modal">
+      <h2>Update License</h2>
+      <div class="form-group">
+        <label>Package</label>
+        <select id="planSelect" onchange="onPlanChange()">
+          <option value="3">3 Months - PRO-3M-XXXX</option>
+          <option value="6">6 Months - PRO-6M-XXXX</option>
+          <option value="12" selected>12 Months - PRO-12M-XXXX</option>
+          <option value="forever">Forever - PRO-VIP-XXXX</option>
+          <option value="custom">Custom Days</option>
+        </select>
+      </div>
+      <div class="form-group" id="customDaysGroup" style="display: none;">
+        <label>Custom Days</label>
+        <input type="number" id="customDays" placeholder="Enter number of days">
+      </div>
+      <div class="form-group">
+        <label>License Key</label>
+        <input type="text" id="licenseKey" placeholder="Click package to auto-generate or enter custom">
+        <small style="color: #666;">Để trống để tự động tạo theo gói đã chọn</small>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">Cancel</button>
+        <button onclick="updateLicense()">Update</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin;
+    let token = localStorage.getItem('adminToken') || '';
+    let selectedUserId = null;
+
+    if (token) {
+      document.getElementById('adminToken').value = token;
+      login();
+    }
+
+    function onPlanChange() {
+      const plan = document.getElementById('planSelect').value;
+      const keyInput = document.getElementById('licenseKey');
+      const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+      if (!keyInput.value || keyInput.value.startsWith('PRO-') || keyInput.value === 'TRIAL' || keyInput.value === 'FOREVER') {
+        if (plan === '3') keyInput.value = 'PRO-3M-' + rand;
+        else if (plan === '6') keyInput.value = 'PRO-6M-' + rand;
+        else if (plan === '12') keyInput.value = 'PRO-12M-' + rand;
+        else if (plan === 'forever') keyInput.value = 'PRO-VIP-' + rand;
+      }
+      document.getElementById('customDaysGroup').style.display = plan === 'custom' ? 'block' : 'none';
+    }
+
+    document.getElementById('planSelect').addEventListener('change', (e) => {
+      document.getElementById('customDaysGroup').style.display = e.target.value === 'custom' ? 'block' : 'none';
+    });
+
+    async function login() {
+      token = document.getElementById('adminToken').value;
+      const errorDiv = document.getElementById('loginError');
+      
+      try {
+        const res = await fetch(`${API_BASE}/admin/users?token=${token}`);
+        if (!res.ok) throw new Error('Invalid token');
+        
+        localStorage.setItem('adminToken', token);
+        document.getElementById('loginPanel').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        loadUsers();
+      } catch (err) {
+        errorDiv.textContent = err.message;
+        errorDiv.classList.remove('hidden');
+      }
+    }
+
+    async function loadUsers() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/users?token=${token}`);
+        const data = await res.json();
+        
+        const tbody = document.getElementById('usersTable');
+        tbody.innerHTML = data.users.map(u => {
+          const isActive = u.daysRemaining > 0;
+          return `
+            <tr>
+              <td>${u.id}</td>
+              <td>${u.email}</td>
+              <td>${u.fullname || '-'}</td>
+              <td>${u.phone || '-'}</td>
+              <td>${u.license}</td>
+              <td><span class="badge ${isActive ? 'badge-active' : 'badge-expired'}">${isActive ? 'Active' : 'Expired'}</span></td>
+              <td>${u.daysRemaining}</td>
+              <td>
+                <button onclick="openLicenseModal(${u.id})">Set License</button>
+                <button class="danger" onclick="deleteUser(${u.id})">Delete</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        showMessage(err.message, true);
+      }
+    }
+
+    function openLicenseModal(userId) {
+      selectedUserId = userId;
+      document.getElementById('licenseModal').classList.add('active');
+      document.getElementById('planSelect').value = '12';
+      document.getElementById('licenseKey').value = '';
+      document.getElementById('customDaysGroup').style.display = 'none';
+    }
+
+    function closeModal() {
+      document.getElementById('licenseModal').classList.remove('active');
+      selectedUserId = null;
+    }
+
+    async function updateLicense() {
+      if (!selectedUserId) return;
+      
+      const plan = document.getElementById('planSelect').value;
+      const licenseKey = document.getElementById('licenseKey').value;
+      const customDays = document.getElementById('customDays').value;
+      
+      const body = { plan, licenseKey };
+      if (plan === 'custom') body.days = parseInt(customDays) || 30;
+      
+      try {
+        const res = await fetch(`${API_BASE}/admin/users/${selectedUserId}/license?token=${token}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        
+        if (!res.ok) throw new Error('Update failed');
+        
+        closeModal();
+        loadUsers();
+        showMessage('License updated successfully');
+      } catch (err) {
+        showMessage(err.message, true);
+      }
+    }
+
+    async function deleteUser(userId) {
+      if (!confirm('Are you sure you want to delete this user?')) return;
+      
+      try {
+        const res = await fetch(`${API_BASE}/admin/users/${userId}?token=${token}`, {
+          method: 'DELETE'
+        });
+        
+        if (!res.ok) throw new Error('Delete failed');
+        
+        loadUsers();
+        showMessage('User deleted');
+      } catch (err) {
+        showMessage(err.message, true);
+      }
+    }
+
+    function showMessage(msg, isError) {
+      const el = document.getElementById('message');
+      el.textContent = msg;
+      el.className = isError ? 'error' : 'success';
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+  </script>
+</body>
+</html>
