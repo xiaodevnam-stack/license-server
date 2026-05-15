@@ -109,6 +109,26 @@
     let token = localStorage.getItem('adminToken') || '';
     let selectedUserId = null;
 
+    async function apiFetch(url, options = {}) {
+      const res = await fetch(url, options);
+      const text = await res.text();
+      let data = {};
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          const hint = res.status === 404
+            ? 'Không tìm thấy API. Mở admin qua /admin (không phải file .html tĩnh) và deploy lại server Node.'
+            : 'Server trả về không phải JSON';
+          throw new Error(`${hint} (HTTP ${res.status}: ${text.slice(0, 80)})`);
+        }
+      }
+      if (!res.ok) {
+        throw new Error(data.error || data.message || `HTTP ${res.status}`);
+      }
+      return data;
+    }
+
     if (token) {
       document.getElementById('adminToken').value = token;
       login();
@@ -132,27 +152,27 @@
     });
 
     async function login() {
-      token = document.getElementById('adminToken').value;
+      token = document.getElementById('adminToken').value.trim();
       const errorDiv = document.getElementById('loginError');
-      
+      errorDiv.classList.add('hidden');
+
       try {
-        const res = await fetch(`${API_BASE}/admin/users?token=${token}`);
-        if (!res.ok) throw new Error('Invalid token');
-        
+        await apiFetch(`${API_BASE}/admin/users?token=${encodeURIComponent(token)}`);
         localStorage.setItem('adminToken', token);
         document.getElementById('loginPanel').classList.add('hidden');
         document.getElementById('adminPanel').classList.remove('hidden');
         loadUsers();
       } catch (err) {
-        errorDiv.textContent = err.message;
+        errorDiv.textContent = err.message === 'Unauthorized' || err.message.includes('401')
+          ? 'Sai Admin Token (mặc định: admin123, hoặc biến ADMIN_TOKEN trên Render)'
+          : err.message;
         errorDiv.classList.remove('hidden');
       }
     }
 
     async function loadUsers() {
       try {
-        const res = await fetch(`${API_BASE}/admin/users?token=${token}`);
-        const data = await res.json();
+        const data = await apiFetch(`${API_BASE}/admin/users?token=${encodeURIComponent(token)}`);
         
         const tbody = document.getElementById('usersTable');
         tbody.innerHTML = data.users.map(u => {
@@ -202,14 +222,12 @@
       if (plan === 'custom') body.days = parseInt(customDays) || 30;
       
       try {
-        const res = await fetch(`${API_BASE}/admin/users/${selectedUserId}/license?token=${token}`, {
+        await apiFetch(`${API_BASE}/admin/users/${selectedUserId}/license?token=${encodeURIComponent(token)}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body)
         });
-        
-        if (!res.ok) throw new Error('Update failed');
-        
+
         closeModal();
         loadUsers();
         showMessage('License updated successfully');
@@ -222,12 +240,10 @@
       if (!confirm('Are you sure you want to delete this user?')) return;
       
       try {
-        const res = await fetch(`${API_BASE}/admin/users/${userId}?token=${token}`, {
+        await apiFetch(`${API_BASE}/admin/users/${userId}?token=${encodeURIComponent(token)}`, {
           method: 'DELETE'
         });
-        
-        if (!res.ok) throw new Error('Delete failed');
-        
+
         loadUsers();
         showMessage('User deleted');
       } catch (err) {
