@@ -402,7 +402,7 @@ app.post('/api/zkem', async (req, res) => {
 
 const ADMIN_TOKEN =
   process.env.ADMIN_TOKEN ||
-  'admin123';
+  'Lohoainam2008';
 
 function requireAdmin(
   req,
