@@ -224,7 +224,7 @@ app.post('/api/zkem', async (req, res) => {
 });
 
 // Admin endpoints
-const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin123';
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'Lohoainam2008*#@';
 
 function requireAdmin(req, res, next) {
   const token = req.headers['x-admin-token'] || req.query.token;
